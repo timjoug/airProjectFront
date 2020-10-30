@@ -68,30 +68,7 @@ export default {
     droneList: drone.drone,
     ordersList: orders.orders,
     stocksList: stocks.stocks,
-    plansList: [],
-
-    // mockHeader: [
-    //   { text: 'Header 1', value: 'value1'},
-    //   { text: 'Header 2', value: 'value2'},
-    //   { text: 'Header 3', value: 'value3'}
-    // ],
-    // mockList: [
-    //   {
-    //     value1: 'Alpha',
-    //     value2: 59,
-    //     value3: 'Lille'
-    //   },
-    //   {
-    //     value1: 'Beta',
-    //     value2: 59,
-    //     value3: 'Douai'
-    //   },
-    //   {
-    //     value1: 'Gamma',
-    //     value2: 62,
-    //     value3: 'Arras'
-    //   }
-    // ]
+    plansList: []
   })
 }
 </script>
