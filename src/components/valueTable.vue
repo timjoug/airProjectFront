@@ -5,7 +5,7 @@
         <v-data-table
             :headers="headers"
             :items="contentList"
-            hide-defalt-footer
+            hide-default-footer
             class="elevation-1"
         ></v-data-table>
     </div>
@@ -29,6 +29,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .tableBlock {
-    margin : 0.5%
+    margin : 0.5%;
+    box-shadow: 1px 2px 3px grey;
 }
 </style>
