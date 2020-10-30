@@ -1,14 +1,16 @@
 <template>
-    <div class="tableBlock">
+    <v-flex class="tableBlock">
         <TitleBar
-        v-bind:title="tableTitle"></TitleBar>
+        v-bind:title="tableTitle"
+        v-bind:type="'h2'"
+        ></TitleBar>
         <v-data-table
             :headers="headers"
             :items="contentList"
             hide-default-footer
             class="elevation-1"
         ></v-data-table>
-    </div>
+    </v-flex>
 </template>
 
 <script>
@@ -29,7 +31,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .tableBlock {
-    margin : 0.5%;
+    margin : 1%;
     box-shadow: 1px 2px 3px grey;
 }
 </style>

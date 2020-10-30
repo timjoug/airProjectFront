@@ -1,29 +1,32 @@
 <template>
   <div id="app">
-    <TitleBar
-    v-bind:title="'Leroy Merlin - Air Project'"
-    ></TitleBar>
-    
-    <ValueTable
-    v-bind:tableTitle="'Plans'"
-    v-bind:headers="plansHeader"
-    v-bind:contentList="plansList"
-    ></ValueTable>
-    <ValueTable
-    v-bind:tableTitle="'Orders'"
-    v-bind:headers="ordersHeader"
-    v-bind:contentList="ordersList"
-    ></ValueTable>
-    <ValueTable
-    v-bind:tableTitle="'Stocks'"
-    v-bind:headers="stocksHeader"
-    v-bind:contentList="stocksList"
-    ></ValueTable>
-    <ValueTable
-    v-bind:tableTitle="'Drones'"
-    v-bind:headers="droneHeader"
-    v-bind:contentList="droneList"
-    ></ValueTable>
+    <v-container>
+      <TitleBar
+      v-bind:title="'Leroy Merlin - Air Project'"
+      v-bind:type="'h1'"
+      ></TitleBar>
+      
+      <ValueTable
+      v-bind:tableTitle="'Plans'"
+      v-bind:headers="plansHeader"
+      v-bind:contentList="plansList"
+      ></ValueTable>
+      <ValueTable
+      v-bind:tableTitle="'Orders'"
+      v-bind:headers="ordersHeader"
+      v-bind:contentList="ordersList"
+      ></ValueTable>
+      <ValueTable
+      v-bind:tableTitle="'Stocks'"
+      v-bind:headers="stocksHeader"
+      v-bind:contentList="stocksList"
+      ></ValueTable>
+      <ValueTable
+      v-bind:tableTitle="'Drones'"
+      v-bind:headers="droneHeader"
+      v-bind:contentList="droneList"
+      ></ValueTable>
+    </v-container>
   </div>
 </template>
 
@@ -80,6 +83,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  /* margin-top: 60px; */
+}
+.container {
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 </style>
