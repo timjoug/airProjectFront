@@ -6,28 +6,32 @@
     
     <ValueTable
     v-bind:tableTitle="'Plans'"
-    v-bind:headers="mockHeader"
-    v-bind:contentList="mockList"
+    v-bind:headers="plansHeader"
+    v-bind:contentList="plansList"
     ></ValueTable>
     <ValueTable
     v-bind:tableTitle="'Orders'"
-    v-bind:headers="mockHeader"
-    v-bind:contentList="mockList"
+    v-bind:headers="ordersHeader"
+    v-bind:contentList="ordersList"
     ></ValueTable>
     <ValueTable
     v-bind:tableTitle="'Stocks'"
-    v-bind:headers="mockHeader"
-    v-bind:contentList="mockList"
+    v-bind:headers="stocksHeader"
+    v-bind:contentList="stocksList"
     ></ValueTable>
     <ValueTable
     v-bind:tableTitle="'Drones'"
-    v-bind:headers="mockHeader"
-    v-bind:contentList="mockList"
+    v-bind:headers="droneHeader"
+    v-bind:contentList="droneList"
     ></ValueTable>
   </div>
 </template>
 
 <script>
+import drone from './mock/drone'
+import orders from './mock/orders'
+import stocks from './mock/stocks'
+
 import TitleBar from './components/titleBar.vue'
 import ValueTable from './components/valueTable.vue'
 
@@ -38,28 +42,56 @@ export default {
     ValueTable
   },
   data: () => ({
-    mockHeader: [
-      { text: 'Header 1', value: 'value1'},
-      { text: 'Header 2', value: 'value2'},
-      { text: 'Header 3', value: 'value3'}
+    droneHeader: [
+      { text: 'Drones', value: 'id'},
+      { text: 'Autonomy', value: 'autonomy'},
+      { text: 'X', value: 'x'},
+      { text: 'Y', value: 'y'}
     ],
-    mockList: [
-      {
-        value1: 'Alpha',
-        value2: 59,
-        value3: 'Lille'
-      },
-      {
-        value1: 'Beta',
-        value2: 59,
-        value3: 'Douai'
-      },
-      {
-        value1: 'Gamma',
-        value2: 62,
-        value3: 'Arras'
-      }
-    ]
+    ordersHeader: [
+      { text: '#', value: 'id'},
+      { text: 'Customers', value: 'customerId'},
+      { text: 'Products', value: 'products'}
+    ],
+    plansHeader: [
+      { text: 'Drones', value: 'droneId'}, //ex : drone.id
+      { text: 'Stores', value: 'storeId'}, //ex : stores.id
+      { text: 'Products', value: 'productId'},
+      { text: 'Customers', value: 'customerId'}
+    ],
+    stocksHeader: [
+      { text: 'Products', value: 'productId'},//ex : stores.stock.productId
+      { text: 'Villeneuve', value: 'vaQuantity'},
+      { text: 'Roncq', value: 'roncqQuantity'},
+      { text: 'Lesquin', value: 'lesquinQuantity'}// valeur id de stores.json
+    ],
+    droneList: drone.drone,
+    ordersList: orders.orders,
+    stocksList: stocks.stocks,
+    plansList: [],
+
+    // mockHeader: [
+    //   { text: 'Header 1', value: 'value1'},
+    //   { text: 'Header 2', value: 'value2'},
+    //   { text: 'Header 3', value: 'value3'}
+    // ],
+    // mockList: [
+    //   {
+    //     value1: 'Alpha',
+    //     value2: 59,
+    //     value3: 'Lille'
+    //   },
+    //   {
+    //     value1: 'Beta',
+    //     value2: 59,
+    //     value3: 'Douai'
+    //   },
+    //   {
+    //     value1: 'Gamma',
+    //     value2: 62,
+    //     value3: 'Arras'
+    //   }
+    // ]
   })
 }
 </script>
