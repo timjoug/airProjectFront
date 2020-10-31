@@ -27,6 +27,23 @@ export default {
                 })
             })
             return stockList;
+        },
+
+        /**
+         * This function will generate a list, able to match with the orders data table pattern .
+         * @param {Object} objectInput - Source object for the orders List Generation
+         */
+        generateOrdersTable(objectInput) {
+            let orderList = [];
+            objectInput.forEach(orderItem => {
+                let basketString = '';
+                orderItem.basket.forEach(basketItem => {
+                    basketString = basketString.concat(', ', basketItem.quantity.toString().concat(' ', 'x ', basketItem.productId));
+                });
+                basketString = basketString.slice(2);
+                orderList.push({ "id": orderItem.id, "customerId": orderItem.customerId, "products": basketString });
+            });
+            return orderList;
         }
     }
 }

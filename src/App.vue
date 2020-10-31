@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import orders from './mock/orders'
 
 import TitleBar from './components/titleBar.vue'
 import ValueTable from './components/valueTable.vue'
@@ -40,6 +39,7 @@ import listGeneration from './script/listGeneration'
 
 const droneJson = require('./input/drone.json');
 const storesJson = require('./input/stores.json');
+const ordersJson = require('./input/orders.json')
 
 export default {
   name: 'App',
@@ -73,12 +73,13 @@ export default {
       { text: 'Lesquin', value: 'lesquinQuantity'}// valeur id de stores.json
     ],
     droneList: droneJson,
-    ordersList: orders.orders,
+    ordersList: [],
     stocksList: [],
     plansList: []
   }),
   mounted() {
-    this.stocksList = this.generateStocksTable(storesJson)
+    this.stocksList = this.generateStocksTable(storesJson);
+    this.ordersList = this.generateOrdersTable(ordersJson);
   }
 }
 </script>
