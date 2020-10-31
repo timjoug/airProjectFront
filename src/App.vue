@@ -102,7 +102,35 @@ export default {
     this.emptyList = empty(this.ordersList) || empty(this.stocksList)
   },
   methods: {
+    calcDistance(xDestination, yDestination, xStart, yStart){
+      return Math.sqrt( Math.pow((xDestination - xStart), 2) +  Math.pow((yDestination - yStart), 2) );
+    },
     updatePlanValues(droneId, storeId, productId, customerId){
+      let customerInfo, droneInfo, storeInfo, totalDistance;
+      this.stocksList.forEach(elt => {
+        if(productId === elt.productId){
+          if(storeId === 'Villeneuve') {elt.vaQuantity -= 1;}
+          else if(storeId === 'Roncq') {elt.roncqQuantity -= 1;}
+          else if(storeId === 'Lesquin') {elt.lesquinQuantity -= 1;}
+        }
+      });
+      this.customersList.forEach(elt => {
+        if (customerId === elt.id){
+          customerInfo = elt
+        }
+      });
+      this.storesList.forEach(elt => {
+        if (storeId === elt.id){
+          storeInfo = elt
+        }
+      });
+      this.droneList.forEach(elt => {
+        if (droneId === elt.id){ 
+          droneInfo = elt
+          totalDistance = this.calcDistance(storeInfo.x, storeInfo.y, droneInfo.x, droneInfo.y) + this.calcDistance(customerInfo.x, customerInfo.y ,storeInfo.x, storeInfo.y)
+          elt.autonomy = (elt.autonomy - totalDistance).toFixed(3)
+        }
+      });
       this.plansList.push({"droneId": droneId, "storeId": storeId, "productId": productId, "customerId": customerId})
     }
   }
