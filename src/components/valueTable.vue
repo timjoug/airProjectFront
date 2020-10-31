@@ -10,9 +10,9 @@
         tile 
         outlined 
         color="#66ab5a">
-            <v-icon left>mdi-plus</v-icon>Edit
+            <v-icon left>mdi-plus</v-icon>Add Plan
         </v-btn>
-        
+
         <v-data-table
             :headers="headers"
             :items="contentList"
