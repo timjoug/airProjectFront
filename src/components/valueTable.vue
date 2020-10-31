@@ -161,17 +161,26 @@ export default {
             }
             this.dialog = true
       },
-    //   filterSelectList(val, type){
-    //         if(type === 'customer'){
-
-    //         }
-    //         else if(type === 'drone'){
-    //         }
-    //         else if(type === 'product'){
-    //         }
-    //         else if(type === 'store'){
-    //         }
-    //   }
+      filterSelectList(val, type){
+            // if(type === 'product'){
+            //     this.storeArray.forEach(store => {
+            //         console.log(store)
+            //         store.stock.forEach(elt => {
+            //             if(val === elt.productId){
+            //                 console.log(elt.productId, elt.quantity)
+            //             }
+            //         })
+            //     })
+            // }
+            // else 
+            if(type === 'store'){
+                this.productArray.forEach(product => {
+                    if(product.vaQuantity === 0 && val === 'Villeneuve' || product.roncqQuantity === 0 && val === 'Roncq' || product.lesquinQuantity === 0 && val === 'Lesquin') {
+                        this.productLabelList = this.productLabelList.filter(productItem => productItem !== product.productId)
+                    }
+                })
+            }
+      }
   }
 }
 </script>
