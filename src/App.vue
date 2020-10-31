@@ -1,42 +1,56 @@
 <template>
   <div id="app">
-    <v-container>
-      <TitleBar
-      v-bind:title="'Leroy Merlin - Air Project'"
-      v-bind:type="'h1'"
-      ></TitleBar>
-      
-      <ValueTable
-      v-bind:tableTitle="'Plans'"
-      v-bind:headers="plansHeader"
-      v-bind:contentList="plansList"
-      ></ValueTable>
-      <ValueTable
-      v-bind:tableTitle="'Orders'"
-      v-bind:headers="ordersHeader"
-      v-bind:contentList="ordersList"
-      ></ValueTable>
-      <ValueTable
-      v-bind:tableTitle="'Stocks'"
-      v-bind:headers="stocksHeader"
-      v-bind:contentList="stocksList"
-      ></ValueTable>
-      <ValueTable
-      v-bind:tableTitle="'Drones'"
-      v-bind:headers="droneHeader"
-      v-bind:contentList="droneList"
-      ></ValueTable>
-    </v-container>
+    <div v-if="emptyList">
+      <Loader></Loader>
+    </div>
+    <div v-else>
+      <v-container data-app>
+        <TitleBar
+        v-bind:title="'Leroy Merlin - Air Project'"
+        v-bind:type="'h1'"
+        ></TitleBar>
+        
+        <ValueTable
+        v-bind:tableTitle="'Plans'"
+        v-bind:headers="plansHeader"
+        v-bind:contentList="plansList"
+        v-bind:droneList="droneList"
+        v-bind:storesList="storesList"
+        v-bind:productList="stocksList"
+        v-bind:customersList="customersList"
+        v-bind:updatePlanValues="updatePlanValues"
+        ></ValueTable>
+        <ValueTable
+        v-bind:tableTitle="'Orders'"
+        v-bind:headers="ordersHeader"
+        v-bind:contentList="ordersList"
+        ></ValueTable>
+        <ValueTable
+        v-bind:tableTitle="'Stocks'"
+        v-bind:headers="stocksHeader"
+        v-bind:contentList="stocksList"
+        ></ValueTable>
+        <ValueTable
+        v-bind:tableTitle="'Drones'"
+        v-bind:headers="droneHeader"
+        v-bind:contentList="droneList"
+        ></ValueTable>
+      </v-container>
+    </div>
+    
   </div>
 </template>
 
 <script>
+import empty from 'is-empty'
 
 import TitleBar from './components/titleBar.vue'
 import ValueTable from './components/valueTable.vue'
+import Loader from './components/loader.vue'
 
 import listGeneration from './script/listGeneration'
 
+const customersJson = require('./input/customers.json');
 const droneJson = require('./input/drone.json');
 const storesJson = require('./input/stores.json');
 const ordersJson = require('./input/orders.json')
@@ -44,6 +58,7 @@ const ordersJson = require('./input/orders.json')
 export default {
   name: 'App',
   components: {
+    Loader,
     TitleBar,
     ValueTable
   },
@@ -61,25 +76,35 @@ export default {
       { text: 'Products', value: 'products'}
     ],
     plansHeader: [
-      { text: 'Drones', align: 'start', value: 'droneId'}, //ex : drone.id
-      { text: 'Stores', value: 'storeId'}, //ex : stores.id
+      { text: 'Drones', align: 'start', value: 'droneId'},
+      { text: 'Stores', value: 'storeId'},
       { text: 'Products', value: 'productId'},
       { text: 'Customers', value: 'customerId'}
     ],
     stocksHeader: [
-      { text: 'Products', align: 'start', value: 'productId'},//ex : stores.stock.productId
+      { text: 'Products', align: 'start', value: 'productId'},
       { text: 'Villeneuve', value: 'vaQuantity'},
       { text: 'Roncq', value: 'roncqQuantity'},
-      { text: 'Lesquin', value: 'lesquinQuantity'}// valeur id de stores.json
+      { text: 'Lesquin', value: 'lesquinQuantity'}
     ],
+    emptyList: null,
+    customersList: customersJson,
     droneList: droneJson,
     ordersList: [],
     stocksList: [],
+    storesList: storesJson,
     plansList: []
   }),
-  mounted() {
-    this.stocksList = this.generateStocksTable(storesJson);
-    this.ordersList = this.generateOrdersTable(ordersJson);
+  async mounted() {
+    this.emptyList = empty(this.ordersList) || empty(this.stocksList)
+    this.ordersList = await this.generateOrdersTable(ordersJson);
+    this.stocksList = await this.generateStocksTable(this.storesList);
+    this.emptyList = empty(this.ordersList) || empty(this.stocksList)
+  },
+  methods: {
+    updatePlanValues(droneId, storeId, productId, customerId){
+      this.plansList.push({"droneId": droneId, "storeId": storeId, "productId": productId, "customerId": customerId})
+    }
   }
 }
 </script>
