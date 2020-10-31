@@ -10,7 +10,7 @@
             tile 
             outlined 
             color="#66ab5a"
-            @click.stop="dialog = true"
+            @click.stop="initDroneFilter"
             >
                 <v-icon left>mdi-plus</v-icon>Add Plan
             </v-btn>
@@ -30,6 +30,7 @@
                     label="Customers *"
                     dense
                     outlined
+                    @change="filterSelectList(customersResult, 'customer')"
                 ></v-select>
 
                 <v-select
@@ -38,6 +39,7 @@
                     label="Drones *"
                     dense
                     outlined
+                    @change="filterSelectList(droneResult, 'drone')"
                 ></v-select>
 
                 <v-select
@@ -46,6 +48,7 @@
                     label="Products *"
                     dense
                     outlined
+                    @change="filterSelectList(productResult, 'product')"
                 ></v-select>
 
                 <v-select
@@ -54,6 +57,7 @@
                     label="Stores *"
                     dense
                     outlined
+                    @change="filterSelectList(storeResult, 'store')"
                 ></v-select>
 
                 <v-card-actions>
@@ -86,6 +90,7 @@
 </template>
 
 <script>
+import empty from 'is-empty'
 import TitleBar from './titleBar.vue'
 export default {
   name: 'ValueTable',
@@ -112,7 +117,12 @@ export default {
           customersResult: '',
           droneResult: '',
           productResult: '',
-          storeResult: ''
+          storeResult: '',
+          
+          customerArray: this.$props.customersList,
+          droneArray: this.$props.droneList,
+          productArray: this.$props.productList,
+          storeArray: this.$props.storesList
 
       }
   },
@@ -142,7 +152,26 @@ export default {
           this.droneResult = '';
           this.productResult = '';
           this.storeResult = '';
-      }
+      },
+      initDroneFilter(){
+            if(!empty(this.$props.contentList)){
+                this.$props.contentList.forEach(elt => {
+                    this.droneLabelList = this.droneLabelList.filter(droneId => droneId !== elt.droneId)
+                });
+            }
+            this.dialog = true
+      },
+    //   filterSelectList(val, type){
+    //         if(type === 'customer'){
+
+    //         }
+    //         else if(type === 'drone'){
+    //         }
+    //         else if(type === 'product'){
+    //         }
+    //         else if(type === 'store'){
+    //         }
+    //   }
   }
 }
 </script>
