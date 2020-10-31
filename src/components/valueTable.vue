@@ -4,6 +4,15 @@
         v-bind:title="tableTitle"
         v-bind:type="'h2'"
         ></TitleBar>
+
+        <v-btn 
+        v-if="tableTitle === 'Plans'"
+        tile 
+        outlined 
+        color="#66ab5a">
+            <v-icon left>mdi-plus</v-icon>Edit
+        </v-btn>
+        
         <v-data-table
             :headers="headers"
             :items="contentList"
@@ -33,5 +42,8 @@ export default {
 .tableBlock {
     margin : 1%;
     box-shadow: 1px 2px 3px grey;
+}
+.tableBlock button {
+    margin: 0.5% 1% 0.5%
 }
 </style>
