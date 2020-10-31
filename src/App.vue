@@ -31,12 +31,15 @@
 </template>
 
 <script>
-import drone from './mock/drone'
 import orders from './mock/orders'
-import stocks from './mock/stocks'
 
 import TitleBar from './components/titleBar.vue'
 import ValueTable from './components/valueTable.vue'
+
+import listGeneration from './script/listGeneration'
+
+const droneJson = require('./input/drone.json');
+const storesJson = require('./input/stores.json');
 
 export default {
   name: 'App',
@@ -44,35 +47,39 @@ export default {
     TitleBar,
     ValueTable
   },
+  mixins: [ listGeneration ],
   data: () => ({
     droneHeader: [
-      { text: 'Drones', value: 'id'},
+      { text: 'Drones', align: 'start', value: 'id'},
       { text: 'Autonomy', value: 'autonomy'},
       { text: 'X', value: 'x'},
       { text: 'Y', value: 'y'}
     ],
     ordersHeader: [
-      { text: '#', value: 'id'},
+      { text: '#', align: 'start', value: 'id'},
       { text: 'Customers', value: 'customerId'},
       { text: 'Products', value: 'products'}
     ],
     plansHeader: [
-      { text: 'Drones', value: 'droneId'}, //ex : drone.id
+      { text: 'Drones', align: 'start', value: 'droneId'}, //ex : drone.id
       { text: 'Stores', value: 'storeId'}, //ex : stores.id
       { text: 'Products', value: 'productId'},
       { text: 'Customers', value: 'customerId'}
     ],
     stocksHeader: [
-      { text: 'Products', value: 'productId'},//ex : stores.stock.productId
+      { text: 'Products', align: 'start', value: 'productId'},//ex : stores.stock.productId
       { text: 'Villeneuve', value: 'vaQuantity'},
       { text: 'Roncq', value: 'roncqQuantity'},
       { text: 'Lesquin', value: 'lesquinQuantity'}// valeur id de stores.json
     ],
-    droneList: drone.drone,
+    droneList: droneJson,
     ordersList: orders.orders,
-    stocksList: stocks.stocks,
+    stocksList: [],
     plansList: []
-  })
+  }),
+  mounted() {
+    this.stocksList = this.generateStocksTable(storesJson)
+  }
 }
 </script>
 
