@@ -66,7 +66,7 @@
                 <v-btn
                     color="green darken-1"
                     text
-                    @click="dialog = false"
+                    @click="cancelPlanTable()"
                 >Cancel</v-btn>
 
                 <v-btn
@@ -128,30 +128,44 @@ export default {
   },
   mounted() {
         if(this.$props.tableTitle === 'Plans') {
-            this.$props.customersList.forEach(item => {
-                this.customersLabelList.push(item.id)
-            });
-            this.$props.droneList.forEach(item => {
-                this.droneLabelList.push(item.id)
-            });
-            this.$props.productList.forEach(item => {
-                this.productLabelList.push(item.productId)
-            });
-            this.$props.storesList.forEach(item => {
-                this.storesLabelList.push(item.id)
-            });
+            this.labelListGeneration(this.$props.customersList, this.customersLabelList, 'customer');
+
+            this.labelListGeneration(this.$props.droneList, this.droneLabelList, 'drone');
+
+            this.labelListGeneration(this.$props.productList, this.productLabelList, 'product');
+
+            this.labelListGeneration(this.$props.storesList, this.storesLabelList, 'store');
         }
 
       
   },
   methods: {
-      updatePlanTable(){
-          this.dialog = false
-          this.$props.updatePlanValues(this.droneResult, this.storeResult, this.productResult, this.customersResult)
+      labelListGeneration(baseList, targetList, itemType) {
+          baseList.forEach(item => {
+              if(itemType === 'product'){
+                  targetList.push(item.productId);
+              }
+              else {
+                  targetList.push(item.id);
+              }
+          })
+      },
+      cancelPlanTable(){
+          this.dialog = false;
           this.customersResult = '';
           this.droneResult = '';
           this.productResult = '';
           this.storeResult = '';
+
+          this.productLabelList = [];
+          this.labelListGeneration(this.$props.productList, this.productLabelList, 'product');
+
+          this.storesLabelList = []
+          this.labelListGeneration(this.$props.storesList, this.storesLabelList, 'store');
+      },
+      updatePlanTable(){
+          this.$props.updatePlanValues(this.droneResult, this.storeResult, this.productResult, this.customersResult);
+          this.cancelPlanTable();
       },
       initDroneFilter(){
             if(!empty(this.$props.contentList)){
@@ -162,18 +176,21 @@ export default {
             this.dialog = true
       },
       filterSelectList(val, type){
-            // if(type === 'product'){
-            //     this.storeArray.forEach(store => {
-            //         console.log(store)
-            //         store.stock.forEach(elt => {
-            //             if(val === elt.productId){
-            //                 console.log(elt.productId, elt.quantity)
-            //             }
-            //         })
-            //     })
-            // }
-            // else 
+            if(type === 'product'){
+                this.storesLabelList = []
+                this.storeArray.forEach(store => {
+                    store.stock.forEach(stock => {
+                        if(stock.productId === val){
+                            console.log(store.id, val)
+                            this.storesLabelList.push(store.id)
+                        }
+                    })
+                })
+            }
             if(type === 'store'){
+                this.productLabelList = [];
+                this.labelListGeneration(this.$props.productList, this.productLabelList, 'product');
+                
                 this.productArray.forEach(product => {
                     if(product.vaQuantity === 0 && val === 'Villeneuve' || product.roncqQuantity === 0 && val === 'Roncq' || product.lesquinQuantity === 0 && val === 'Lesquin') {
                         this.productLabelList = this.productLabelList.filter(productItem => productItem !== product.productId)
