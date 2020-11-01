@@ -72,6 +72,7 @@
                 <v-btn
                     color="green darken-1"
                     text
+                    :disabled="confirmPlanState"
                     @click="updatePlanTable()"
                 >Confirm</v-btn>
                 </v-card-actions>
@@ -122,7 +123,9 @@ export default {
           customerArray: this.$props.customersList,
           droneArray: this.$props.droneList,
           productArray: this.$props.productList,
-          storeArray: this.$props.storesList
+          storeArray: this.$props.storesList,
+
+          confirmPlanState: true
 
       }
   },
@@ -159,9 +162,10 @@ export default {
 
           this.productLabelList = [];
           this.labelListGeneration(this.$props.productList, this.productLabelList, 'product');
-
           this.storesLabelList = []
           this.labelListGeneration(this.$props.storesList, this.storesLabelList, 'store');
+
+          this.confirmPlanState = true;
       },
       updatePlanTable(){
           this.$props.updatePlanValues(this.droneResult, this.storeResult, this.productResult, this.customersResult);
@@ -181,7 +185,6 @@ export default {
                 this.storeArray.forEach(store => {
                     store.stock.forEach(stock => {
                         if(stock.productId === val){
-                            console.log(store.id, val)
                             this.storesLabelList.push(store.id)
                         }
                     })
@@ -197,12 +200,12 @@ export default {
                     }
                 })
             }
+            if (this.customersResult !== '' && this.droneResult !== '' && this.productResult !== '' && this.storeResult !== '') { this.confirmPlanState = false; }
       }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .v-input {
     width: 90%;
