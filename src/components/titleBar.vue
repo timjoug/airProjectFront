@@ -26,4 +26,7 @@ div {
 h1 {
     box-shadow: 1px 2px 3px grey;
 }
+h1, h2{
+    padding: 0.25% 0.5% !important;
+}
 </style>

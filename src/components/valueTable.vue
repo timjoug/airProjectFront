@@ -19,7 +19,20 @@
             v-model="dialog"
             max-width="60%"
             >
-            <v-card>
+            <v-card v-if="outOfAutonomy === true">
+                <v-card-title class="headline">
+                Autonomy Issue
+                </v-card-title>
+                <v-card-text>
+                    This drone ({{ this.droneResult }}) doesn't have enough autonomy for this plan : this plan is cancelled.  
+                </v-card-text>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="cancelPlanTable()"
+                >Close</v-btn>
+            </v-card>
+            <v-card v-else>
                 <v-card-title class="headline">
                 Add a new plan
                 </v-card-title>
@@ -106,7 +119,10 @@ export default {
       storesList: Array,
       productList: Array,
       customersList: Array,
-      updatePlanValues: Function
+      updatePlanValues: Function,
+
+      calcDistance: Function,
+      stocksList: Array
   },
   data() {
       return{
@@ -125,7 +141,8 @@ export default {
           productArray: this.$props.productList,
           storeArray: this.$props.storesList,
 
-          confirmPlanState: true
+          confirmPlanState: true, 
+          outOfAutonomy: false
 
       }
   },
@@ -166,10 +183,33 @@ export default {
           this.labelListGeneration(this.$props.storesList, this.storesLabelList, 'store');
 
           this.confirmPlanState = true;
+          this.outOfAutonomy = false
       },
       updatePlanTable(){
-          this.$props.updatePlanValues(this.droneResult, this.storeResult, this.productResult, this.customersResult);
-          this.cancelPlanTable();
+          let theoricAutonomy, customerInfo, droneInfo, storeInfo, totalDistance;
+            this.$props.customersList.forEach(elt => {
+                if (this.customersResult === elt.id){
+                customerInfo = elt
+                }
+            });
+            this.$props.storesList.forEach(elt => {
+                if (this.storeResult === elt.id){
+                storeInfo = elt
+                }
+            });
+            this.$props.droneList.forEach(elt => {
+                if (this.droneResult === elt.id){ 
+                droneInfo = elt
+                totalDistance = this.calcDistance(storeInfo.x, storeInfo.y, droneInfo.x, droneInfo.y) + this.calcDistance(customerInfo.x, customerInfo.y ,storeInfo.x, storeInfo.y)
+                theoricAutonomy = (elt.autonomy - totalDistance).toFixed(3)
+                }
+            });
+
+            if(theoricAutonomy >= 0){ 
+                this.$props.updatePlanValues(this.droneResult, this.storeResult, this.productResult, this.customersResult, theoricAutonomy); 
+                this.cancelPlanTable(); 
+            } 
+            else { this.outOfAutonomy = true; }
       },
       initDroneFilter(){
             if(!empty(this.$props.contentList)){

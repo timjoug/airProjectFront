@@ -19,6 +19,9 @@
         v-bind:productList="stocksList"
         v-bind:customersList="customersList"
         v-bind:updatePlanValues="updatePlanValues"
+        
+        v-bind:calcDistance="calcDistance"
+        v-bind:stocksList="stocksList"
         ></ValueTable>
         <ValueTable
         v-bind:tableTitle="'Orders'"
@@ -105,8 +108,7 @@ export default {
     calcDistance(xDestination, yDestination, xStart, yStart){
       return Math.sqrt( Math.pow((xDestination - xStart), 2) +  Math.pow((yDestination - yStart), 2) );
     },
-    updatePlanValues(droneId, storeId, productId, customerId){
-      let customerInfo, droneInfo, storeInfo, totalDistance;
+    updatePlanValues(droneId, storeId, productId, customerId, autonomy){
       this.stocksList.forEach(elt => {
         if(productId === elt.productId){
           if(storeId === 'Villeneuve') {elt.vaQuantity -= 1;}
@@ -114,21 +116,9 @@ export default {
           else if(storeId === 'Lesquin') {elt.lesquinQuantity -= 1;}
         }
       });
-      this.customersList.forEach(elt => {
-        if (customerId === elt.id){
-          customerInfo = elt
-        }
-      });
-      this.storesList.forEach(elt => {
-        if (storeId === elt.id){
-          storeInfo = elt
-        }
-      });
       this.droneList.forEach(elt => {
-        if (droneId === elt.id){ 
-          droneInfo = elt
-          totalDistance = this.calcDistance(storeInfo.x, storeInfo.y, droneInfo.x, droneInfo.y) + this.calcDistance(customerInfo.x, customerInfo.y ,storeInfo.x, storeInfo.y)
-          elt.autonomy = (elt.autonomy - totalDistance).toFixed(3)
+        if (droneId === elt.id){
+          elt.autonomy = autonomy
         }
       });
       this.plansList.push({"droneId": droneId, "storeId": storeId, "productId": productId, "customerId": customerId})
