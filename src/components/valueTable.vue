@@ -224,6 +224,10 @@ export default {
         * A drone already used for another plan, will not appear for the new plan creation
         */
       initDroneFilter(){
+            if(this.customersResult !== '') { this.customersResult = ''; }
+            if(this.droneResult !== '') { this.droneResult = ''; }
+            if(this.productResult !== '') { this.productResult = ''; }
+            if(this.storeResult !== '') { this.storeResult = ''; }
             if(!empty(this.$props.contentList)){
                 this.$props.contentList.forEach(elt => {
                     this.droneLabelList = this.droneLabelList.filter(droneId => droneId !== elt.droneId);
