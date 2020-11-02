@@ -106,6 +106,7 @@
 <script>
 import empty from 'is-empty'
 import TitleBar from './titleBar.vue'
+
 export default {
   name: 'ValueTable',
   components: {
@@ -120,9 +121,7 @@ export default {
       productList: Array,
       customersList: Array,
       updatePlanValues: Function,
-
-      calcDistance: Function,
-      stocksList: Array
+      calcDistance: Function
   },
   data() {
       return{
@@ -134,13 +133,9 @@ export default {
           customersResult: '',
           droneResult: '',
           productResult: '',
-          storeResult: '',
-          
-          customerArray: this.$props.customersList,
-          droneArray: this.$props.droneList,
+          storeResult: '',         
           productArray: this.$props.productList,
           storeArray: this.$props.storesList,
-
           confirmPlanState: true, 
           outOfAutonomy: false
 
@@ -149,17 +144,20 @@ export default {
   mounted() {
         if(this.$props.tableTitle === 'Plans') {
             this.labelListGeneration(this.$props.customersList, this.customersLabelList, 'customer');
-
             this.labelListGeneration(this.$props.droneList, this.droneLabelList, 'drone');
-
             this.labelListGeneration(this.$props.productList, this.productLabelList, 'product');
-
             this.labelListGeneration(this.$props.storesList, this.storesLabelList, 'store');
         }
 
       
   },
   methods: {
+      /**
+        * This function generates a list of labels respecting a base List.
+        * @param {Array} baseList - Source List List Generation
+        * @param {Array} targetList - Target List to feed
+        * @param {String} itemType - Type of item of the list (used for the specific case of the product list)
+        */
       labelListGeneration(baseList, targetList, itemType) {
           baseList.forEach(item => {
               if(itemType === 'product'){
@@ -170,6 +168,10 @@ export default {
               }
           })
       },
+
+      /**
+        * This function will reset all the variables, modified during a plan creation.
+        */
       cancelPlanTable(){
           this.dialog = false;
           this.customersResult = '';
@@ -183,25 +185,30 @@ export default {
           this.labelListGeneration(this.$props.storesList, this.storesLabelList, 'store');
 
           this.confirmPlanState = true;
-          this.outOfAutonomy = false
+          this.outOfAutonomy = false;
       },
+
+      /**
+        * This function calculate the distance to do a plan and will feed the plan table
+        * If the autonomy of the targeted drone is not enough, the plan will be cancelled
+        */
       updatePlanTable(){
           let theoricAutonomy, customerInfo, droneInfo, storeInfo, totalDistance;
             this.$props.customersList.forEach(elt => {
                 if (this.customersResult === elt.id){
-                customerInfo = elt
+                customerInfo = elt;
                 }
             });
             this.$props.storesList.forEach(elt => {
                 if (this.storeResult === elt.id){
-                storeInfo = elt
+                storeInfo = elt;
                 }
             });
             this.$props.droneList.forEach(elt => {
                 if (this.droneResult === elt.id){ 
-                droneInfo = elt
-                totalDistance = this.calcDistance(storeInfo.x, storeInfo.y, droneInfo.x, droneInfo.y) + this.calcDistance(customerInfo.x, customerInfo.y ,storeInfo.x, storeInfo.y)
-                theoricAutonomy = (elt.autonomy - totalDistance).toFixed(3)
+                droneInfo = elt;
+                totalDistance = this.calcDistance(storeInfo.x, storeInfo.y, droneInfo.x, droneInfo.y) + this.calcDistance(customerInfo.x, customerInfo.y ,storeInfo.x, storeInfo.y);
+                theoricAutonomy = (elt.autonomy - totalDistance).toFixed(3);
                 }
             });
 
@@ -211,21 +218,32 @@ export default {
             } 
             else { this.outOfAutonomy = true; }
       },
+
+      /**
+        * This function filters the list of the available drone
+        * A drone already used for another plan, will not appear for the new plan creation
+        */
       initDroneFilter(){
             if(!empty(this.$props.contentList)){
                 this.$props.contentList.forEach(elt => {
-                    this.droneLabelList = this.droneLabelList.filter(droneId => droneId !== elt.droneId)
+                    this.droneLabelList = this.droneLabelList.filter(droneId => droneId !== elt.droneId);
                 });
             }
-            this.dialog = true
+            this.dialog = true;
       },
+
+      /**
+        * This function filters the product and the store selection for the plan creation, respecting the selected store/product
+        * @param {String} val - Source List List Generation
+        * @param {String} type - Target List to feed
+        */
       filterSelectList(val, type){
             if(type === 'product'){
-                this.storesLabelList = []
+                this.storesLabelList = [];
                 this.storeArray.forEach(store => {
                     store.stock.forEach(stock => {
                         if(stock.productId === val){
-                            this.storesLabelList.push(store.id)
+                            this.storesLabelList.push(store.id);
                         }
                     })
                 })
@@ -236,7 +254,7 @@ export default {
                 
                 this.productArray.forEach(product => {
                     if(product.vaQuantity === 0 && val === 'Villeneuve' || product.roncqQuantity === 0 && val === 'Roncq' || product.lesquinQuantity === 0 && val === 'Lesquin') {
-                        this.productLabelList = this.productLabelList.filter(productItem => productItem !== product.productId)
+                        this.productLabelList = this.productLabelList.filter(productItem => productItem !== product.productId);
                     }
                 })
             }

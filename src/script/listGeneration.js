@@ -12,10 +12,10 @@ export default {
             objectInput.forEach(inputItem => {
                 inputItem.stock.forEach(stockItem => {
                     if (!productList.includes(stockItem.productId)) {
-                        productList.push(stockItem.productId)
-                        stockList.push({ "productId": stockItem.productId, "vaQuantity": 0, "roncqQuantity": 0, "lesquinQuantity": 0 })
+                        productList.push(stockItem.productId);
+                        stockList.push({ "productId": stockItem.productId, "vaQuantity": 0, "roncqQuantity": 0, "lesquinQuantity": 0 });
                     }
-                    stockFlatList.push({ "productId": stockItem.productId, "storeId": inputItem.id, "quantity": stockItem.quantity })
+                    stockFlatList.push({ "productId": stockItem.productId, "storeId": inputItem.id, "quantity": stockItem.quantity });
                 })
             });
 

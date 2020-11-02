@@ -19,9 +19,7 @@
         v-bind:productList="stocksList"
         v-bind:customersList="customersList"
         v-bind:updatePlanValues="updatePlanValues"
-        
         v-bind:calcDistance="calcDistance"
-        v-bind:stocksList="stocksList"
         ></ValueTable>
         <ValueTable
         v-bind:tableTitle="'Orders'"
@@ -46,17 +44,14 @@
 
 <script>
 import empty from 'is-empty'
-
 import TitleBar from './components/titleBar.vue'
 import ValueTable from './components/valueTable.vue'
 import Loader from './components/loader.vue'
-
 import listGeneration from './script/listGeneration'
-
 const customersJson = require('./input/customers.json');
 const droneJson = require('./input/drone.json');
 const storesJson = require('./input/stores.json');
-const ordersJson = require('./input/orders.json')
+const ordersJson = require('./input/orders.json');
 
 export default {
   name: 'App',
@@ -105,9 +100,26 @@ export default {
     this.emptyList = empty(this.ordersList) || empty(this.stocksList)
   },
   methods: {
+    /**
+      * This function returns a distance between two points.
+      * Each point is identified by a longitude (x) and a latitude (y)
+      * @param {Number} xDestination - Longitude of the destination point
+      * @param {Number} yDestination - Latitude of the destination point
+      * @param {Number} xStart - Longitude of the start point
+      * @param {Number} yStart - Latitude of the start point
+      */
     calcDistance(xDestination, yDestination, xStart, yStart){
       return Math.sqrt( Math.pow((xDestination - xStart), 2) +  Math.pow((yDestination - yStart), 2) );
     },
+
+    /**
+      * This function modifies the differents values linked with a plan cration.
+      * @param {Number} droneId - Name of the drone
+      * @param {Number} storeId - Name of the store
+      * @param {Number} productId - Name of the product
+      * @param {Number} customerId - Name of the customer
+      * @param {Number} autonomy - Remaining Autonomy Value
+      */
     updatePlanValues(droneId, storeId, productId, customerId, autonomy){
       this.stocksList.forEach(elt => {
         if(productId === elt.productId){
@@ -118,10 +130,10 @@ export default {
       });
       this.droneList.forEach(elt => {
         if (droneId === elt.id){
-          elt.autonomy = autonomy
+          elt.autonomy = autonomy;
         }
       });
-      this.plansList.push({"droneId": droneId, "storeId": storeId, "productId": productId, "customerId": customerId})
+      this.plansList.push({"droneId": droneId, "storeId": storeId, "productId": productId, "customerId": customerId});
     }
   }
 }
